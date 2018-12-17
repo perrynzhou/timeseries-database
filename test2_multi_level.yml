@@ -1,0 +1,16 @@
+test1:
+  addr: 127.0.0.1
+  port: 5432
+  workers: 2
+  backlog: 1024
+  timeout: 100
+  servers:
+   - 127.0.0.1:11212:1
+   - 127.0.0.1:11213:1
+test2:
+  addr: 128.0.0.1
+  port: 5431
+  workers: 2
+  backlog: 1024
+  timeout: 100
+

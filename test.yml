@@ -1,0 +1,16 @@
+test1:
+  addr: 127.0.0.1
+  port: 5432
+  workers: 2
+  backlog: 1024
+  timeout: 100
+  datadir: /tmp
+  memtable_size:  16384
+test2:
+  addr: 128.0.0.1
+  port: 5431
+  workers: 2
+  backlog: 1024
+  timeout: 100
+  datadir: 1
+  memtable_size:  16384
