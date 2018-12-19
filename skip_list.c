@@ -73,7 +73,6 @@ struct skip_list *skip_list_create(int max_level)
 }
 int skip_list_insert(struct skip_list *st, void *ptr, uint32_t key)
 {
-
   struct skip_listnode *cur = st->head;
   struct skip_listnode *update[st->max_level];
   int level = skip_list_random_level(st->max_level);
@@ -84,13 +83,13 @@ int skip_list_insert(struct skip_list *st, void *ptr, uint32_t key)
   }
   for (int i = (st->max_level - 1); i >= 0; i--)
   {
-    if (cur == st->tail || cur->next[i]->key < key)
+    if (cur->next[i] == st->tail || cur->next[i]->key > key)
     {
       update[i] = cur;
     }
     else
     {
-      while (cur != st->tail && cur->next[i]->key > key)
+      while (cur->next[i] != st->tail && cur->next[i]->key < key)
       {
         cur = cur->next[i];
       }
@@ -209,32 +208,33 @@ void skip_list_print(struct skip_list *st)
 #ifdef TEST
 int main(void)
 {
-  int values[32];
-  struct skip_list *st = skip_list_create(8);
+  int values[4096];
+  struct skip_list *st = skip_list_create(16);
   fprintf(stdout, "------insert skip_list-----------\n");
-  for (int i = 0; i < 32; i++)
+  for (int i = 0; i < 4096; i++)
   {
-    values[i] = rand() % 1024 + i;
+    values[i] = rand() % 4096 + i;
     fprintf(stdout, "insert key=%d,ret = %d\n", values[i],
             skip_list_insert(st, &values[i], values[i]));
   }
   fprintf(stdout, "----------print skip_list------------\n");
   skip_list_print(st);
   fprintf(stdout, "-------find skip_lsit ------------\n");
-  for (int i = 1; i < 8; i++)
+  for (int i = 1; i < 1024; i++)
   {
     int key = values[rand() % 32];
     int *ptr = skip_list_find(st, key);
     if (ptr != NULL)
     {
-      fprintf(stdout, " find key=%d,*ptr=%d\n", key, *ptr);
+      //fprintf(stdout, " find key=%d,*ptr=%d\n", key, *ptr);
     }
   }
   fprintf(stdout, "------delete skip_list-----------\n");
-  for (int i = 1; i < 4; i++)
+  for (int i = 1; i < 1024; i++)
   {
     int key = values[rand() % 16];
-    fprintf(stdout, "key=%d,ret=%d\n", key, skip_list_remove(st, key));
+    skip_list_remove(st, key);
+   // fprintf(stdout, "key=%d,ret=%d\n", key, skip_list_remove(st, key));
   }
   fprintf(stdout, "----------print skip_list------------\n");
 
